@@ -1,0 +1,15 @@
+{
+  "allRepositorySigned": false,
+  "signingCertificates": [
+    {
+      "fingerprints": {
+        "2.16.840.1.101.3.4.2.1": "79851da778a4780d2720588901a41b70ad9e584f847d09359949862f138e92ac"
+      },
+      "subject": "CN=Microsoft Corporation, OU=MOPR, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "issuer": "CN=Microsoft Code Signing PCA 2011, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "notBefore": "2016-11-17T22:09:21.0000000Z",
+      "notAfter": "2018-02-17T22:09:21.0000000Z",
+      "contentUrl": "https://api.nuget.org/v3-index/repository-signatures/certificates/79851da778a4780d2720588901a41b70ad9e584f847d09359949862f138e92ac.crt"
+    }
+  ]
+}
