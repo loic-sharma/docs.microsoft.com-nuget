@@ -20,9 +20,9 @@ ms.reviewer:
 
 # Repository signatures
 
-If a package source supports adding repository signatures to packages, it is possible for a client to determine the
-signing certificates that are be used by the package source. This resource allows clients to detect whether a
-repository signed package has been tampered or has an unexpected signing certificate.
+If a package source supports adding repository signatures to published packages, it is possible for a client to
+determine the signing certificates that are be used by the package source. This resource allows clients to detect
+whether a repository signed package has been tampered or has an unexpected signing certificate.
 
 The resource used for fetching this repository signature information is the `RepositorySignatures` resource found in
 the [service index](service-index.md).
@@ -99,7 +99,7 @@ The `fingerprints` object has the following properties:
 
 Name                   | Type   | Required | Notes
 ---------------------- | ------ | -------- | -----
-2.16.840.1.101.3.4.2.1 | string | yes      | The SHA-256 thumbprint
+2.16.840.1.101.3.4.2.1 | string | yes      | The SHA-256 fingerprint
 
 The key name `2.16.840.1.101.3.4.2.1` is the OID of the SHA-256 hash algorithm.
 
