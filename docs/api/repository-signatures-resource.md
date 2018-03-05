@@ -21,7 +21,7 @@ ms.reviewer:
 # Repository signatures
 
 If a package source supports adding repository signatures to published packages, it is possible for a client to
-determine the signing certificates that are be used by the package source. This resource allows clients to detect
+determine the signing certificates that are used by the package source. This resource allows clients to detect
 whether a repository signed package has been tampered or has an unexpected signing certificate.
 
 The resource used for fetching this repository signature information is the `RepositorySignatures` resource found in
@@ -50,13 +50,14 @@ All URLs found in the repository signatures resource support only the HTTP metho
 
 The repository signatures index contains two pieces of information:
 
-1. Whether or not all packages found on the source are repository signed.
+1. Whether or not all packages found on the source are repository signed by this package source.
 1. The list of certificates used by the package source to sign packages.
 
 In most cases, the list of certificates will only ever be appended to. New certificates would be added to the list when
 the previous signing certificate has expired and the package source needs to start using a new signing certificate. If
-a certificate is removed from the list, that means that all packages signed with the removed signing certificate should
-not longer be considered valid by the client.
+a certificate is removed from the list, that means that all package signatures created with the removed signing
+certificate should no longer be considered valid by the client. In this case, the package signature (but not
+necessarily the package) is invalid. A client policy may allow installing the package as unsigned.
 
 In the case of certificate revocation (e.g. key compromise), the package source is expected to resign all packages
 signed by the affected certificate. Additionally, the package source should remove the affected certificate from the
@@ -77,22 +78,24 @@ The `allRepositorySigned` boolean is set to false if the package source has some
 signature. If the boolean is set to true, all packages available on the source must have a repository
 signature produced by one of the signing certificates mentioned in `signingCertificates`.
 
-There may be zero or more signing certificates in the `signingCertificates` array. Each element in this array is a JSON
-object with the following properties.
+There should be one or more signing certificates in the `signingCertificates` array if the `allRepositorySigned` boolean
+is set to true. If the array is empty and `allRepositorySigned` is set to true, all packages from the source should be
+considered invalid, although a client policy may still allow consumption of packages. Each element in this array is a
+JSON object with the following properties.
 
 Name         | Type   | Required | Notes
 ------------ | ------ | -------- | -----
-contentUrl   | string | yes      | Absolute URL to the DER encoded public certificate
+contentUrl   | string | yes      | Absolute URL to the DER-encoded public certificate
 fingerprints | object | yes      |
 subject      | string | yes      | The subject distinguished name from the certificate
 issuer       | string | yes      | The distinguished name of the certificate's issuer
 notBefore    | string | yes      | The starting timestamp of the certificate's validity period
 notAfter     | string | yes      | The ending timestamp of the certificate's validity period
 
-Note that the `contentUrl` is required to be served over HTTPS. This URL has no specific URL pattern and should be
+Note that the `contentUrl` is required to be served over HTTPS. This URL has no specific URL pattern and must be
 dynamically discovered using this repository signatures index document. 
 
-All properties in this object (aside from `contentUrl`) should be derivable from the certificate found at `contentUrl`.
+All properties in this object (aside from `contentUrl`) must be derivable from the certificate found at `contentUrl`.
 These derivable properties are provided as a convenience to minimize round trips.
 
 The `fingerprints` object has the following properties:
@@ -103,7 +106,7 @@ Name                   | Type   | Required | Notes
 
 The key name `2.16.840.1.101.3.4.2.1` is the OID of the SHA-256 hash algorithm.
 
-All hash values are lowercase, hex-encoded string representations of the hash digest.
+All hash values must be lowercase, hex-encoded string representations of the hash digest.
 
 ### Sample request
 
